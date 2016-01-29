@@ -563,10 +563,6 @@ $(function () {
          * @private
          */
         _say: function (text, options) {
-            if (!window.speechSynthesis) {
-                return;
-            }
-
             options = options || {};
             options.volume = this.settings.volume / 100;
 
