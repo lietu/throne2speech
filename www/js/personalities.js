@@ -225,7 +225,6 @@ var SamuelLJackson = extend(BoringPersonality, {
         {rarity: 4, result: "Fuck you"},
         {rarity: 4, result: "Come on"},
         {rarity: 4, result: "Wake the fuck up"},
-        {rarity: 4, result: "Ahh that hit the spot"},
         {rarity: 4, result: "Oh I'm sorry did I break your concentration"},
         {
             rarity: 4,
@@ -326,6 +325,7 @@ var Bastion = extend(Personality, {
     ]),
 
     death: [
+        {rarity: 2, result: "The kid made a splat"},
         {rarity: 1, result: "The Kid died to {a} {enemy}"},
         {rarity: 1, result: "Watch out Kid, those {enemy}s are dangerous"}
     ],
