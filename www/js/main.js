@@ -94,7 +94,10 @@ $(function () {
                     this.settings.personality = key;
                 }
                 log(personalities[key].name)
-                personalityArray.push({key: key, name: personalities[key].type})
+                personalityArray.push({
+                    key: key,
+                    name: personalities[key].type
+                })
             }
 
             var voices = responsiveVoice.getVoices();
@@ -121,7 +124,8 @@ $(function () {
                     startCommentator: this.startCommentator.bind(this),
                     stopCommentator: this.stopCommentator.bind(this),
                     steamId64HelpVisible: false,
-                    streamKeyHelpVisible: false
+                    streamKeyHelpVisible: false,
+                    testCommentator: this.testCommentator.bind(this)
                 }
             });
 
@@ -322,6 +326,48 @@ $(function () {
             log("Play video");
             $("#video-preview").hide();
             $("#video").removeClass("hidden");
+        },
+
+        _createRandomProgressEvent: function () {
+            var event = {
+                action: choose(["WeaponPickup", "Mutation", "CrownChoice", "LevelEnter"])
+            };
+
+            switch (event.action) {
+                case "WeaponPickup":
+                    event.weaponId = choose(WEAPON_IDS);
+                    break;
+                case "Mutation":
+                    event.mutationId = choose(MUTATION_IDS);
+                    break;
+                case "CrownChoice":
+                    event.crownId = choose(CROWN_IDS);
+                    break;
+                case "LevelEnter":
+                    var props = choose([
+                        {world: 1, area: 1, loop: 0},
+                        {world: 1, area: 3, loop: 0},
+                        {world: 2, area: 1, loop: 0},
+                        {world: 3, area: 1, loop: 0},
+                        {world: 3, area: 3, loop: 0},
+                        {world: 4, area: 1, loop: 0},
+                        {world: 5, area: 1, loop: 0},
+                        {world: 5, area: 3, loop: 0},
+                        {world: 6, area: 1, loop: 0},
+                        {world: 7, area: 1, loop: 0},
+                        {world: 7, area: 3, loop: 0}
+                    ]);
+                    for (var key in props) {
+                        event[key] = props[key];
+                    }
+            }
+
+            return event;
+        },
+
+        testCommentator: function () {
+            this.personality = personalities[this.settings.personality];
+            this._processProgressEvent(this._createRandomProgressEvent());
         },
 
         startCommentator: function () {
@@ -534,35 +580,13 @@ $(function () {
             }
         },
 
-        _configureSpeech: function (msg, options) {
-            function getOpt(value, defaultValue) {
-                if (value !== undefined) {
-                    return value;
-                }
-                return defaultValue;
-            }
-
-            var voices = window.speechSynthesis.getVoices();
-            for (var i = 0, count = voices.length; i < count; i += 1) {
-                if (voices[i].name == "Google UK English Male") {
-                    log(voices[i]);
-                    msg.voice = voices[i];
-                    break;
-                }
-            }
-
-            msg.volume = getOpt(options.volume, 1); // 0 to 1
-            msg.rate = 1; // 0.1 to 10
-            msg.pitch = 1; //0 to 2
-            msg.lang = 'en-US';
-        },
-
         /**
          * Say stuff
          * @param {String} text
          * @private
          */
         _say: function (text, options) {
+            log("Saying: " + text);
             options = options || {};
             options.volume = this.settings.volume / 100;
 

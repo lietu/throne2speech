@@ -108,6 +108,17 @@ function append(oldList, newList) {
 }
 
 /**
+ * Return a random array entry
+ * @param choices
+ * @returns {*}
+ */
+function choose(choices) {
+    var index = randBetween(0, choices.length-1);
+
+    return choices[index];
+}
+
+/**
  * Pick a random item from a list of choices, where each choice is an
  * object with rarity and result -properties
  * @param choices

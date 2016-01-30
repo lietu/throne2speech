@@ -375,3 +375,18 @@ var NAMES = {
         201: "Golden Frog Pistol"
     }
 };
+
+var WEAPON_IDS = [];
+for (var key in NAMES.weaponChoices) {
+    WEAPON_IDS.push(key);
+}
+
+var MUTATION_IDS = [];
+for (var key in NAMES.mutationChoices) {
+    MUTATION_IDS.push(key);
+}
+
+var CROWN_IDS = [];
+for (var key in NAMES.crownChoices) {
+    CROWN_IDS.push(key);
+}
