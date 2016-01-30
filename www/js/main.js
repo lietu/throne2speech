@@ -378,7 +378,11 @@ $(function () {
          */
         connect: function (callback) {
             var proto = (location.protocol === "https:" ? "wss://" : "ws://");
-            var server = proto + window.location.hostname + ":" + window.location.port + "/" + this.settings.dataEndpoint;
+            var port = window.location.port;
+            if (port === "") {
+                port = (proto === "wss://" ? 443 : 80);
+            }
+            var server = proto + window.location.hostname + ":" + port + "/" + this.settings.dataEndpoint;
 
             log("Connecting to " + server);
 
