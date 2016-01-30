@@ -69,17 +69,37 @@ var Personality = extend(Class, {
     },
 
     getMessage: function (event) {
+        if (!event.action) {
+            log(event);
+            return;
+        }
+
         var method = "on" + event.action;
         if (this[method]) {
             return this[method](event);
         } else {
-            log("Unsupported event action " + event.action);
+            log(T("{type} personality doesn't support action {action}", {
+                type: this.type,
+                action: event.action
+            }));
         }
     }
 });
 
 var BoringPersonality = extend(Personality, {
     type: "Boring McBoringson",
+
+    healed: [
+        {rarity: 1, result: null},
+        {rarity: 1.5, result: "Oh yeah"},
+        {rarity: 1.5, result: "Nice"},
+        {rarity: 1.5, result: "Great"},
+        {rarity: 1.5, result: "Fantastic"},
+        {rarity: 1.5, result: "Awesome"},
+        {rarity: 3, result: "Thanks for the health"},
+        {rarity: 3, result: "Finally some health"},
+        {rarity: 3, result: "That hit the spot"}
+    ],
 
     hurt: [
         {rarity: 0.5, result: null},
@@ -132,6 +152,12 @@ var BoringPersonality = extend(Personality, {
         });
     },
 
+    onHealed: function (event) {
+        return T(pick(this.healed), {
+            amount: event.amount
+        })
+    },
+
     onDeath: function (event) {
         var enemy = this.getEnemyName(event.enemyId);
         return T(pick(this.death), {
@@ -161,7 +187,10 @@ var BoringPersonality = extend(Personality, {
 var SamuelLJackson = extend(BoringPersonality, {
     type: "Samuel L. Jackson",
 
+    healed: BoringPersonality.healed,
+
     hurt: append(BoringPersonality.hurt, [
+        {rarity: 2, result: "Motherfucker bit me"},
         {
             rarity: 3,
             result: "I've had it with these {enemy}s in this motherfucking level"
@@ -216,12 +245,58 @@ var SamuelLJackson = extend(BoringPersonality, {
 var Bastion = extend(Personality, {
     type: "Bastion",
 
-    weapons: [
-        {rarity: 1, result: "Nice {weapon}, Kid"},
-        {rarity: 1, result: "Be careful with that {weapon}, Kid"},
+    bosses: [
+        {rarity: 1, result: "The Kid reached the {boss}"},
+        {rarity: 2, result: "A big old fella pops out in front of the kid"}
     ],
 
-    hurt: BoringPersonality.hurt,
+    healed: [
+        {rarity: 1, result: "The kid healed up a bit"},
+        {rarity: 1, result: "The kid found some health"},
+        {rarity: 1, result: "Good, keep the health up, Kid"},
+        {rarity: 1, result: "Now don't get hit again, Kid"},
+        {rarity: 1, result: "The kid got some health back"}
+    ],
+
+    levelProgress: [
+        {rarity: 1, result: "The kid finds another level"},
+        {
+            rarity: 1,
+            result: "The kid wonders which one of these twisted streets to choose"
+        },
+        {
+            rarity: 1,
+            result: "Now he lands at the intersection between bad and wrong"
+        },
+        {rarity: 1, result: "Did anybody else survive?"},
+        {rarity: 1, result: "The portal whisks him where he needs to go"},
+        {rarity: 1, result: "The portal took the kid to yet another place"},
+        {
+            rarity: 1,
+            result: "The kid starts to wonder if these portals ever stop"
+        },
+        {
+            rarity: 1,
+            result: "The ground forms up under his feet, as if pointing the way."
+        },
+        {rarity: 1, result: "He sets foot inside another {world} level"},
+        {rarity: 1, result: "The kid arrives to the tough part of town"}
+    ],
+
+    weapons: [
+        {rarity: 1, result: "Nice {weapon}, Kid"},
+        {rarity: 1, result: "The kid finds {a} {weapon}"},
+        {rarity: 1, result: "The kid fine-tunes that arsenal of his"},
+        {rarity: 1, result: "Be careful with that {weapon}, Kid"},
+        {
+            rarity: 1,
+            result: "Kid finds a memento from a girl he knew. Always used to fancy her."
+        }
+    ],
+
+    hurt: append(BoringPersonality.hurt, [
+        {rarity: 1, result: "Fella got a piece of the Kid"}
+    ]),
 
     death: [
         {rarity: 1, result: "The Kid died to {a} {enemy}"},
@@ -286,17 +361,31 @@ var Bastion = extend(Personality, {
         });
     },
 
+    onHealed: function (event) {
+        return T(pick(this.healed), {
+            amount: event.amount
+        })
+    },
+
     onLevelEnter: function (event) {
         var boss = this.getBossName(event.world, event.area, event.loop);
+        var world = this.getWorldName(event.world);
+
         if (boss) {
-            return T("The Kid reached the {boss}", {
+            return T(pick(this.bosses), {
                 boss: boss
             });
+        } else if (event.world === 1 && event.area === 1 && event.loop === 0) {
+            return "The Kid decided to have another try.";
         } else if (event.area === 1) {
-            var world = this.getWorldName(event.world);
-
             if (world) {
                 return T("And the Kid entered the {world}", {
+                    world: world
+                });
+            }
+        } else {
+            if (world) {
+                return T(pick(this.levelProgress), {
                     world: world
                 });
             }
