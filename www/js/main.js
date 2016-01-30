@@ -278,16 +278,6 @@ $(function () {
 
             log("Was asked to show view " + this.settings.view);
 
-            if (this.settings.view === "overlay") {
-                if (this.checkSettings(this.settings, true)) {
-                    this.showOverlay();
-                    return;
-                } else {
-                    log("Invalid settings prevent showing overlay, showing get-overlay instead");
-                    this.settings.view = "get-overlay";
-                }
-            }
-
             this._showContentView(this.settings.view);
         },
 
@@ -477,7 +467,7 @@ $(function () {
         _switchTab: function (view) {
             if (view != this.activeView) {
                 $(".tabular.menu .item").removeClass("active");
-                $("#information, #get-overlay, #stats").removeClass("active");
+                $("#information, #virtual-commentator").removeClass("active");
 
                 var tab = "#" + view + "-tab";
                 var selector = "#" + view + ", " + tab;
