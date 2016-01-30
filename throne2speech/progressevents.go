@@ -9,6 +9,7 @@ type ProgressEvent interface {
 	ToJson() []byte
 }
 
+
 // Weapon
 type WeaponPickup struct {
 	Action   string   `json:"action"`
@@ -33,6 +34,7 @@ func (wp *WeaponPickup) ToJson() []byte {
 
 	return result
 }
+
 
 // Mutation
 type Mutation struct {
@@ -114,6 +116,32 @@ func (m *CrownChoice) ToJson() []byte {
 }
 
 
+// Healed
+type Healed struct {
+	Action string   `json:"action"`
+	amount int      `json:"amount"`
+}
+
+func NewHealed(amount int) ProgressEvent {
+	event := Healed{
+		"Healed",
+		amount,
+	}
+
+	return &event
+}
+
+func (le *Healed) ToJson() []byte {
+	result, err := json.Marshal(&le)
+
+	if err != nil {
+		log.Fatalf("error: %v", err)
+	}
+
+	return result
+}
+
+
 // Level
 type LevelEnter struct {
 	Action string   `json:"action"`
@@ -142,7 +170,6 @@ func (le *LevelEnter) ToJson() []byte {
 
 	return result
 }
-
 
 
 // Death
@@ -195,4 +222,3 @@ func (le *Hurt) ToJson() []byte {
 
 	return result
 }
-

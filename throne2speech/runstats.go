@@ -11,6 +11,7 @@ type RunStats struct {
 	lastCrown    int
 	lastUltra	 int
 	lastHurt	 int
+	lastHealth	 int
 	diedOnLevel  string
 	weapons      []int
 	mutations    []int
@@ -24,6 +25,7 @@ func NewRunStats() *RunStats {
 		DEFAULT_CROWN,
 		DEFAULT_ULTRA,
 		DEFAULT_ENEMY,
+		0,
 		"",
 		[]int{},
 		[]int{},
@@ -96,6 +98,14 @@ func (rs *RunStats) Hurt(enemyId int) bool {
 	rs.lastHurt = enemyId
 
 	return true
+}
+
+func (rs *RunStats) Healed(health int) int {
+	diff := health - rs.lastHealth
+
+	rs.lastHealth = health
+
+	return diff
 }
 
 

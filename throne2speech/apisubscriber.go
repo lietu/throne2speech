@@ -64,6 +64,11 @@ func (as *ApiSubscriber) onHurt(enemyId int) {
 	log.Printf("Player %s was hurt by a %s", as.SteamId64, enemy)
 }
 
+func (as *ApiSubscriber) onHealed(amount int) {
+	as.SendProgressEvent(NewHealed(amount))
+	log.Printf("Player %s was healed by %d points", as.SteamId64, amount)
+}
+
 func (as *ApiSubscriber) onNewRun(rd *RunData) {
 	character := Characters[rd.Character]
 	log.Printf("Player %s started a new run with %s", as.SteamId64, character)
@@ -87,6 +92,7 @@ func (as *ApiSubscriber) processUpdate(rdc *RunDataContainer) {
 	// If we have a current run
 	if rdc.Current.Timestamp > 0 {
 		if as.running == false {
+			as.runStats.Healed(8)
 			as.onNewRun(current)
 			as.onNewLevel(current)
 			as.running = true
@@ -113,6 +119,11 @@ func (as *ApiSubscriber) processUpdate(rdc *RunDataContainer) {
 
 			if as.runStats.Hurt(current.LastDamagedBy) {
 				as.onHurt(current.LastDamagedBy)
+			}
+
+			amount := as.runStats.Healed(current.Health)
+			if amount > 0 {
+				as.onHealed(amount)
 			}
 
 			// Reached new level
