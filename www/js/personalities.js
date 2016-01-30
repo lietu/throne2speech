@@ -89,6 +89,10 @@ var Personality = extend(Class, {
 var BoringPersonality = extend(Personality, {
     type: "Boring McBoringson",
 
+    bosses: [
+        {rarity: 1, result: "Entered {boss} level"}
+    ],
+
     healed: [
         {rarity: 1, result: null},
         {rarity: 1.5, result: "Oh yeah"},
@@ -111,7 +115,7 @@ var BoringPersonality = extend(Personality, {
     ],
 
     death: [
-        {rarity: 1, result: "Died to {a} {enemy}"}
+        {rarity: 1, result: "Died to {a} {enemy}"},
     ],
 
     onWeaponPickup: function (event) {
@@ -153,12 +157,24 @@ var BoringPersonality = extend(Personality, {
     },
 
     onHealed: function (event) {
+        if (event.amount > 4) {
+            if (Math.random() > 0.8) {
+                return "Dead not dead";
+            }
+        }
+
         return T(pick(this.healed), {
             amount: event.amount
         })
     },
 
     onDeath: function (event) {
+        if (Math.random() > 0.8) {
+            if (loop === 0 && event.world !== 7 && event.area !== 3) {
+                return "You did not reach the nuclear throne";
+            }
+        }
+
         var enemy = this.getEnemyName(event.enemyId);
         return T(pick(this.death), {
             a: this.getPrefix(enemy),
@@ -169,7 +185,11 @@ var BoringPersonality = extend(Personality, {
     onLevelEnter: function (event) {
         var boss = this.getBossName(event.world, event.area, event.loop);
         if (boss) {
-            return T("Entered {boss} level", {
+            if (boss === "Nuclear Throne" && Math.random() > 0.8) {
+                return "You reached the nuclear throne";
+            }
+
+            return T(pick(this.bosses), {
                 boss: boss
             });
         } else if (event.area === 1) {
@@ -188,6 +208,10 @@ var SamuelLJackson = extend(BoringPersonality, {
     type: "Samuel L. Jackson",
 
     healed: BoringPersonality.healed,
+
+    bosses: append(BoringPersonality.bosses, [
+        {rarity: 2, result: "Watch out for the {boss}"},
+    ]),
 
     hurt: append(BoringPersonality.hurt, [
         {rarity: 2, result: "Motherfucker bit me"},
@@ -247,6 +271,9 @@ var Bastion = extend(Personality, {
 
     bosses: [
         {rarity: 1, result: "The Kid reached the {boss}"},
+        {rarity: 1, result: "Watch out Kid, {boss} is near"},
+        {rarity: 1, result: "The {boss} was on the kid's way"},
+        {rarity: 1, result: "Then the kid met the {boss}"},
         {rarity: 2, result: "A big old fella pops out in front of the kid"}
     ],
 
@@ -354,6 +381,12 @@ var Bastion = extend(Personality, {
     },
 
     onDeath: function (event) {
+        if (Math.random() > 0.9) {
+            if (loop === 0 && event.world !== 7 && event.area !== 3) {
+                return "The kid did not reach the nuclear throne";
+            }
+        }
+
         var enemy = this.getEnemyName(event.enemyId);
         return T(pick(this.death), {
             a: this.getPrefix(enemy),
