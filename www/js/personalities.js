@@ -12,7 +12,7 @@ function motherfuckerify(callback) {
 var Personality = extend(Class, {
     language: "English",
 
-    initialize: function() {
+    initialize: function () {
         this.names = LANGUAGES[this.language];
     },
 
@@ -43,19 +43,27 @@ var Personality = extend(Class, {
     getBossName: function (world, area, loop) {
         if (loop > 0) {
             switch (world) {
-                case 2: return this.names.Bosses.BallMom;
-                case 4: return this.names.Bosses.HyperCrystal;
-                case 6: return this.names.Bosses.Technomancer;
+                case 2:
+                    return this.names.Bosses.BallMom;
+                case 4:
+                    return this.names.Bosses.HyperCrystal;
+                case 6:
+                    return this.names.Bosses.Technomancer;
             }
         }
 
         if (area === 3) {
             switch (world) {
-                case 1: return this.names.Bosses.BigBandit;
-                case 3: return this.names.Bosses.BigDog;
-                case 5: return this.names.Bosses.LittleHunter;
-                case 7: return this.names.Bosses.NuclearThrone;
-                case 106: return this.names.Bosses.Captain;
+                case 1:
+                    return this.names.Bosses.BigBandit;
+                case 3:
+                    return this.names.Bosses.BigDog;
+                case 5:
+                    return this.names.Bosses.LittleHunter;
+                case 7:
+                    return this.names.Bosses.NuclearThrone;
+                case 106:
+                    return this.names.Bosses.Captain;
             }
         }
 
@@ -198,6 +206,106 @@ var BoringPersonality = extend(Personality, {
 
             if (world) {
                 return T("Entered the {world}", {
+                    world: world
+                });
+            }
+        }
+    }
+});
+
+var SwedishPersonality = extend(Personality, {
+    type: "Kärnkrafts Tron",
+    language: "Swedish",
+
+    bosses: [
+        {rarity: 1, result: "Anlände {boss} fältet"},
+        {rarity: 3, result: "Akta dig för {boss}, för fan!"},
+    ],
+
+    healed: [
+        {rarity: 1, result: null},
+        {rarity: 1.5, result: "Gött"},
+        {rarity: 1.5, result: "Najs"},
+        {rarity: 1.5, result: "Underbart"},
+        {rarity: 3, result: "Äntligen"},
+    ],
+
+    hurt: [
+        {rarity: 0.5, result: null},
+        {rarity: 1, result: "Aj"},
+        {rarity: 1, result: "Ow"},
+        {rarity: 1, result: "Jäklar"},
+        {rarity: 4, result: "Jävlar!"},
+    ],
+
+    death: [
+        {rarity: 1, result: "{enemy} dödade mig."},
+        {rarity: 1, result: "Jag efterfrågade aldrig detta."},
+    ],
+
+    onWeaponPickup: function (event) {
+        var name = this.getWeaponName(event.weaponId);
+
+        return T("Plockade upp {weapon}", {
+            a: this.getPrefix(name),
+            weapon: name
+        });
+    },
+
+    onMutation: function (event) {
+        var mutation = this.getMutationName(event.mutationId);
+        return T("Valde {mutation}", {
+            mutation: mutation
+        });
+    },
+
+    onUltraMutation: function (event) {
+        var ultra = this.getUltraMutationName(event.characterId, event.ultra);
+        return T("Valde {ultra} ultra", {
+            ultra: ultra
+        });
+    },
+
+    onCrownChoice: function (event) {
+        var crown = this.getCrownName(event.crownId);
+        return T("Valde {crown}", {
+            crown: crown
+        });
+    },
+
+    onHurt: function (event) {
+        var enemy = this.getEnemyName(event.enemyId);
+        return T(pick(this.hurt), {
+            a: this.getPrefix(enemy),
+            enemy: enemy
+        });
+    },
+
+    onHealed: function (event) {
+        return T(pick(this.healed), {
+            amount: event.amount
+        })
+    },
+
+    onDeath: function (event) {
+        var enemy = this.getEnemyName(event.enemyId);
+        return T(pick(this.death), {
+            a: this.getPrefix(enemy),
+            enemy: enemy
+        });
+    },
+
+    onLevelEnter: function (event) {
+        var boss = this.getBossName(event.world, event.area, event.loop);
+        if (boss) {
+            return T(pick(this.bosses), {
+                boss: boss
+            });
+        } else if (event.area === 1) {
+            var world = this.getWorldName(event.world);
+
+            if (world) {
+                return T("Du har anlänt {world}", {
                     world: world
                 });
             }
@@ -529,5 +637,6 @@ var personalities = {
     "Boring": BoringPersonality,
     "SamuelLJackson": SamuelLJackson,
     "Bastion": Bastion,
-    "FinnishPersonality": FinnishPersonality
+    "FinnishPersonality": FinnishPersonality,
+    "SwedishPersonality": SwedishPersonality
 };
