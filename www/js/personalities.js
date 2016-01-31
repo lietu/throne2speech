@@ -10,58 +10,56 @@ function motherfuckerify(callback) {
 }
 
 var Personality = extend(Class, {
+    language: "English",
+
+    initialize: function() {
+        this.names = LANGUAGES[this.language];
+    },
+
     getEnemyName: function (enemyId) {
-        return NAMES.causesOfDeath[enemyId];
+        return this.names.Enemies[enemyId];
     },
 
     getWeaponName: function (weaponId) {
-        return NAMES.weaponChoices[weaponId];
+        return this.names.Weapons[weaponId];
     },
 
     getCrownName: function (crownId) {
-        return NAMES.crownChoices[crownId];
+        return this.names.Crowns[crownId];
     },
 
     getMutationName: function (mutationId) {
-        return NAMES.mutationChoices[mutationId];
+        return this.names.Mutations[mutationId];
     },
 
     getUltraMutationName: function (characterId, ultra) {
-        return ULTRAS[characterId][ultra];
+        return this.names.Ultras[characterId][ultra];
     },
 
     getWorldName: function (world) {
-        return WORLDS[world];
+        return this.names.Worlds[world];
     },
 
     getBossName: function (world, area, loop) {
         if (loop > 0) {
             switch (world) {
-                case 2:
-                    return "Ball mom";
-                case 4:
-                    return "Hyper crystal";
-                case 6:
-                    return "Technomancer";
+                case 2: return this.names.Bosses.BallMom;
+                case 4: return this.names.Bosses.HyperCrystal;
+                case 6: return this.names.Bosses.Technomancer;
             }
         }
 
         if (area === 3) {
             switch (world) {
-                case 1:
-                    return "Big Bandit";
-                case 3:
-                    return "Big Dog";
-                case 5:
-                    return "Little Hunter";
-                case 7:
-                    return "Nuclear Throne";
-                case 106:
-                    return "Captain";
+                case 1: return this.names.Bosses.BigBandit;
+                case 3: return this.names.Bosses.BigDog;
+                case 5: return this.names.Bosses.LittleHunter;
+                case 7: return this.names.Bosses.NuclearThrone;
+                case 106: return this.names.Bosses.Captain;
             }
         }
 
-        // TODO: Throne 2 and Captain
+        // TODO: Throne 2
     },
 
     getPrefix: function (word) {
@@ -70,9 +68,12 @@ var Personality = extend(Class, {
 
     getMessage: function (event) {
         if (!event.action) {
+            log("Got invalid event");
             log(event);
             return;
         }
+
+        log(event);
 
         var method = "on" + event.action;
         if (this[method]) {
@@ -170,7 +171,7 @@ var BoringPersonality = extend(Personality, {
 
     onDeath: function (event) {
         if (Math.random() > 0.8) {
-            if (loop === 0 && event.world !== 7 && event.area !== 3) {
+            if (event.loop === 0 && event.world !== 7 && event.area !== 3) {
                 return "You did not reach the nuclear throne";
             }
         }
@@ -197,6 +198,104 @@ var BoringPersonality = extend(Personality, {
 
             if (world) {
                 return T("Entered the {world}", {
+                    world: world
+                });
+            }
+        }
+    }
+});
+
+var FinnishPersonality = extend(Personality, {
+    type: "Ydinvoima Valtaistuimelle (Finnish)",
+    language: "Finnish",
+
+    bosses: [
+        {rarity: 1, result: "Saavuit {boss} kenttään"}
+    ],
+
+    healed: [
+        {rarity: 1, result: null},
+        {rarity: 1.5, result: "Siistiä"},
+        {rarity: 1.5, result: "Kiva"},
+        {rarity: 1.5, result: "Ihanaa"},
+        {rarity: 3, result: "Vihdoinkin"},
+    ],
+
+    hurt: [
+        {rarity: 0.5, result: null},
+        {rarity: 1, result: "Au"},
+        {rarity: 1, result: "Auts"},
+        {rarity: 1, result: "Ai"},
+        {rarity: 4, result: "Perkele"},
+    ],
+
+    death: [
+        {rarity: 1, result: "{enemy} tappoi sinut"},
+    ],
+
+    onWeaponPickup: function (event) {
+        var name = this.getWeaponName(event.weaponId);
+
+        return T("Noukit {weapon}", {
+            a: this.getPrefix(name),
+            weapon: name
+        });
+    },
+
+    onMutation: function (event) {
+        var mutation = this.getMutationName(event.mutationId);
+        return T("Valitsit {mutation}", {
+            mutation: mutation
+        });
+    },
+
+    onUltraMutation: function (event) {
+        var ultra = this.getUltraMutationName(event.characterId, event.ultra);
+        return T("Valitsit {ultra} ultran", {
+            ultra: ultra
+        });
+    },
+
+    onCrownChoice: function (event) {
+        var crown = this.getCrownName(event.crownId);
+        return T("Valitsit {crown}", {
+            crown: crown
+        });
+    },
+
+    onHurt: function (event) {
+        var enemy = this.getEnemyName(event.enemyId);
+        return T(pick(this.hurt), {
+            a: this.getPrefix(enemy),
+            enemy: enemy
+        });
+    },
+
+    onHealed: function (event) {
+        return T(pick(this.healed), {
+            amount: event.amount
+        })
+    },
+
+    onDeath: function (event) {
+        var enemy = this.getEnemyName(event.enemyId);
+        return T(pick(this.death), {
+            a: this.getPrefix(enemy),
+            enemy: enemy
+        });
+    },
+
+    onLevelEnter: function (event) {
+        var boss = this.getBossName(event.world, event.area, event.loop);
+        if (boss) {
+            return T(pick(this.bosses), {
+                boss: boss
+            });
+        } else if (event.area === 1) {
+            var world = this.getWorldName(event.world);
+
+            if (world) {
+                return T("Saavuit {world}", {
                     world: world
                 });
             }
@@ -429,5 +528,6 @@ var Bastion = extend(Personality, {
 var personalities = {
     "Boring": BoringPersonality,
     "SamuelLJackson": SamuelLJackson,
-    "Bastion": Bastion
+    "Bastion": Bastion,
+    "FinnishPersonality": FinnishPersonality
 };

@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Throne 2 Speech - Real-time Nuclear Throne virtual commentator</title>
+    <title>Throne 2 Speech - Real-time Nuclear Throne virtual
+        commentator</title>
     <meta name="description"
           content="Real-time Nuclear Throne virtual commentation primarily for micless streams">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,7 +19,7 @@
     <script src="lib/rivets/dist/rivets.bundled.min.js"></script>
 
     <link rel="stylesheet" href="css/main.css">
-
+      
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <script>window.html5 || document.write('<script src="js/vendor/html5shiv.js"><\/script>')</script>
@@ -33,7 +34,8 @@
         <div rv-on-click="ui.showInformation" id="information-tab"
              class="active item">Information
         </div>
-        <div rv-on-click="ui.showVirtualCommentator" id="virtual-commentator-tab" class="item">
+        <div rv-on-click="ui.showVirtualCommentator"
+             id="virtual-commentator-tab" class="item">
             Virtual Commentator
         </div>
     </div>
@@ -44,7 +46,8 @@
             <a href="http://nuclearthrone.com/">Nuclear Throne</a> by <a
                     href="http://vlambeer.com/">Vlambeer</a>.</p>
 
-        <p><b>Throne 2 Speech</b> uses a Text to Speech engine to provide commentation
+        <p><b>Throne 2 Speech</b> uses a Text to Speech engine to provide
+            commentation
             on the progress of your Nuclear Throne runs, based on data fetched
             via the Stream Key API in Nuclear Throne.</p>
 
@@ -75,7 +78,8 @@
         <h2 class="ui header">How do I get it</h2>
 
         <p>Click on the <em><a href="#view=virtual-commentator"
-                               rv-on-click="ui.goToView">"Virtual Commentator"</a></em>
+                               rv-on-click="ui.goToView">"Virtual
+            Commentator"</a></em>
             -tab at the top of the page for
             full setup instructions.</p>
 
@@ -88,8 +92,7 @@
         <h2 class="ui header">What browsers does this work on?</h2>
 
         <p>Probably any modern browser works, tested on Chrome, Firefox and
-            Edge,
-            assumed to work on Safari.</p>
+            Edge, assumed to work on Safari.</p>
 
         <h2 class="ui header">Can I contribute somehow?</h2>
 
@@ -104,33 +107,37 @@
 
         <h2 class="ui header">Legal stuff</h2>
 
-        <p>Nuclear Throne is (probably) a trademark of Vlambeer. Throne 2 Speech
-            is not affiliated with Vlambeer and vice-versa. Neither is the creator
+        <p>Nuclear Throne is (probably) a trademark of Vlambeer. Throne 2
+            Speech
+            is not affiliated with Vlambeer and vice-versa. Neither is the
+            creator
             of Throne 2 Speech.</p>
 
         <p>
-            <div style="width:300px;vertical-align:top;font-family: Arial;font-size:9pt;line-height: normal">
-                <a rel="license" href="//responsivevoice.org/"><img
-                        title="ResponsiveVoice Text To Speech"
-                        src="//responsivevoice.org/wp-content/uploads/2014/08/120x31.png"
-                        style="float:left;padding-right:2px"></a><span
-                    xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a
-                    href="//responsivevoice.org/" target="_blank"
-                    title="ResponsiveVoice Text To Speech">ResponsiveVoice</a></span>
-                used under <a rel="license"
-                              href="http://creativecommons.org/licenses/by-nc-nd/4.0/"
-                              title="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License">Non-Commercial
-                License</a></div>
+
+        <div style="width:300px;vertical-align:top;font-family: Arial;font-size:9pt;line-height: normal">
+            <a rel="license" href="//responsivevoice.org/"><img
+                    title="ResponsiveVoice Text To Speech"
+                    src="//responsivevoice.org/wp-content/uploads/2014/08/120x31.png"
+                    style="float:left;padding-right:2px"></a><span
+                xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a
+                href="//responsivevoice.org/" target="_blank"
+                title="ResponsiveVoice Text To Speech">ResponsiveVoice</a></span>
+            used under <a rel="license"
+                          href="http://creativecommons.org/licenses/by-nc-nd/4.0/"
+                          title="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License">Non-Commercial
+            License</a></div>
         </p>
 
         <p>Copyright &copy; 2015-infinity Janne "Lietu" Enberg.</p>
     </div>
+
     <div id="virtual-commentator" class="ui bottom attached tab segment">
         <h2 class="ui header">Virtual Commentator</h2>
 
         <p>You only need to fill in your SteamID64 and Stream Key for
             Throne 2 Speech to be able to connect to the API. After that,
-           the virtual commentator can start commenting on your progress.</p>
+            the virtual commentator can start commenting on your progress.</p>
 
         <div class="ui form">
             <div class="two fields">
@@ -150,82 +157,92 @@
                 <div class="field">
                     <label>Personality</label>
                     <select rv-value="settings.personality">
-                        <option rv-each-personality="personalities" rv-value="personality.key">{personality.name}</option>
+                        <option rv-each-personality="personalities"
+                                rv-value="personality.key">{personality.name}
+                        </option>
                     </select>
                 </div>
                 <div class="field">
                     <label>Voice</label>
                     <select rv-value="settings.voice">
-                        <option rv-each-voice="voices" rv-value="voice.name">{voice.name}</option>
+                        <option rv-each-voice="voices" rv-value="voice.name">
+                            {voice.name}
+                        </option>
                     </select>
                 </div>
             </div>
             <div class="one field">
                 <div class="field">
                     <label>Volume</label>
-                    <input rv-value="settings.volume" type="number" min="0" max="100" step="5" />
-            </div>
-            <div class="two fields">
-                <button rv-on-click="ui.startCommentator"
-                        class="ui primary button">
-                    Start Virtual Commentator
-                </button>
-                <button rv-on-click="ui.stopCommentator" class="ui button">
-                    Stop Virtual Commentator
-                </button>
-                <button rv-on-click="ui.testCommentator" class="ui button">
-                    Test personality and voice
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Help modals -->
-
-    <div id="steamId64Help" class="ui modal">
-        <i class="close icon"></i>
-
-        <div class="header">
-            Locating your SteamId64
-        </div>
-        <div class="content">
-            <p>Easiest way to get your SteamID64 is to go to <a target="_blank"
-                                                                href="https://steamid.io/lookup">https://steamid.io/lookup</a>
-                and click on <em>"Sign in through Steam"</em>, and then
-                authenticate yourself with your Steam user account. After that
-                click on your profile image and choose <em>"profile"</em> and
-                look for the the <em>"steamID64"</em> -line.</p>
-        </div>
-        <div class="image content">
-            <div class="image">
-                <img src="img/steamid.jpg">
+                    <input rv-value="settings.volume" type="number" min="0"
+                           max="100" step="5"/>
+                </div>
+                <div class="two fields">
+                    <button rv-on-click="ui.startCommentator"
+                            class="ui primary button">
+                        Start Virtual Commentator
+                    </button>
+                    <button rv-on-click="ui.stopCommentator" class="ui button">
+                        Stop Virtual Commentator
+                    </button>
+                    <button rv-on-click="ui.testCommentator" class="ui button">
+                        Test personality and voice
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="actions">
-            <div class="ui button">OK</div>
-        </div>
-    </div>
 
-    <div id="streamKeyHelp" class="ui modal">
-        <i class="close icon"></i>
+        <!-- Help modals -->
 
-        <div class="header">
-            Locating your Stream Key
-        </div>
-        <div class="content">
-            <p>Locating your stream key from Nuclear Throne is easy. Just go to
-                Settings -> Game, and click on <em>"Stream Key"</em> if it says
-                <em>"Disabled"</em> to generate one.</p>
-        </div>
-        <div class="image content">
-            <div class="image">
-                <img src="img/nt_stream_key.jpg">
+        <div id="steamId64Help" class="ui modal">
+            <i class="close icon"></i>
+
+            <div class="header">
+                Locating your SteamId64
+            </div>
+            <div class="content">
+                <p>Easiest way to get your SteamID64 is to go to <a
+                        target="_blank"
+                        href="https://steamid.io/lookup">https://steamid.io/lookup</a>
+                    and click on <em>"Sign in through Steam"</em>, and then
+                    authenticate yourself with your Steam user account. After
+                    that
+                    click on your profile image and choose <em>"profile"</em>
+                    and
+                    look for the the <em>"steamID64"</em> -line.</p>
+            </div>
+            <div class="image content">
+                <div class="image">
+                    <img src="img/steamid.jpg">
+                </div>
+            </div>
+            <div class="actions">
+                <div class="ui button">OK</div>
             </div>
         </div>
-        <div class="actions">
-            <div class="ui button">OK</div>
+
+        <div id="streamKeyHelp" class="ui modal">
+            <i class="close icon"></i>
+
+            <div class="header">
+                Locating your Stream Key
+            </div>
+            <div class="content">
+                <p>Locating your stream key from Nuclear Throne is easy. Just
+                    go to
+                    Settings -> Game, and click on <em>"Stream Key"</em> if it
+                    says
+                    <em>"Disabled"</em> to generate one.</p>
+            </div>
+            <div class="image content">
+                <div class="image">
+                    <img src="img/nt_stream_key.jpg">
+                </div>
+            </div>
+            <div class="actions">
+                <div class="ui button">OK</div>
+            </div>
         </div>
-    </div>
 </section>
 
 <script type="text/html" id="message-template">
@@ -242,18 +259,26 @@
 </script>
 
 <script src="js/base.js"></script>
-<script src="js/names.js"></script>
+<script src="js/names_english.js"></script>
+<script src="js/names_finnish.js"></script>
 <script src="js/personalities.js"></script>
 <script src="js/main.js"></script>
 
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-73080297-1', 'auto');
-  ga('send', 'pageview');
+    ga('create', 'UA-73080297-1', 'auto');
+    ga('send', 'pageview');
 
 </script>
 

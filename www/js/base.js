@@ -247,3 +247,6 @@ function copyTextToClipboard(text) {
 
     document.body.removeChild(textArea);
 }
+
+// Used in names -files
+var LANGUAGES = {};

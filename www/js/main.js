@@ -1,6 +1,21 @@
 $(function () {
     var DefaultPersonality = Bastion;
 
+    var WEAPON_IDS = [];
+    for (var key in LANGUAGES.English.Weapons) {
+        WEAPON_IDS.push(key);
+    }
+
+    var MUTATION_IDS = [];
+    for (var key in LANGUAGES.English.Mutations) {
+        MUTATION_IDS.push(key);
+    }
+
+    var CROWN_IDS = [];
+    for (var key in LANGUAGES.English.Crowns) {
+        CROWN_IDS.push(key);
+    }
+
     var Popup = extend(Class, {
         initialize: function (throneStats, header, content, lifetime, icon) {
             log("Showing popup: ", header, content);
@@ -356,13 +371,13 @@ $(function () {
         },
 
         testCommentator: function () {
-            this.personality = personalities[this.settings.personality];
+            this.personality = personalities[this.settings.personality].create();
             this._processProgressEvent(this._createRandomProgressEvent());
         },
 
         startCommentator: function () {
             if (this.checkSettings(this.settings, true)) {
-                this.personality = personalities[this.settings.personality];
+                this.personality = personalities[this.settings.personality].create();
                 this.subscribe();
             }
         },
@@ -588,9 +603,9 @@ $(function () {
         }
     });
 
-    var ts = Throne2Speech.create();
-    ts.start();
+    var t2s = Throne2Speech.create();
+    t2s.start();
 
     // For access via console
-    window.ts = ts;
+    window.t2s = t2s;
 });
