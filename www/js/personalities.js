@@ -214,7 +214,7 @@ var BoringPersonality = extend(Personality, {
 });
 
 var SwedishPersonality = extend(Personality, {
-    type: "Kärnkrafts Tron",
+    type: "Kärnkrafts Tron (Swedish)",
     language: "Swedish",
 
     bosses: [
